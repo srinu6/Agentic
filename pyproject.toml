@@ -1,0 +1,27 @@
+[project]
+name = "agentic"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "langchain>=1.4.3",
+    "langchain-community>=0.4.2",
+    "langchain-google-genai>=4.4.0",
+    "langchain-google-vertexai>=3.2.4",
+    "langchain-groq>=1.1.3",
+    "langchain-openai>=1.6.7",
+    "python-dotenv>=1.2.4",
+]
+
+[project.scripts]
+agentic = "agentic:main"
+
+[build-system]
+requires = ["uv_build>=0.12.21,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "ipykernel>=7.4.0",
+]
