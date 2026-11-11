@@ -11,9 +11,23 @@ Implements:
 """
 
 import re
+import sys
+from pathlib import Path
 from typing import Dict, Any, List, Tuple, Optional
-from mortgageagent.database import append_audit_event
-from mortgageagent.opa_policy import opa_engine
+
+_CURRENT_DIR = Path(__file__).resolve().parent
+_PROJECT_ROOT = _CURRENT_DIR.parent
+if str(_PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(_PROJECT_ROOT))
+if str(_CURRENT_DIR) not in sys.path:
+    sys.path.insert(0, str(_CURRENT_DIR))
+
+try:
+    from mortgageagent.database import append_audit_event
+    from mortgageagent.opa_policy import opa_engine
+except ModuleNotFoundError:
+    from database import append_audit_event
+    from opa_policy import opa_engine
 
 # ---------------------------------------------------------------------------
 # MODULE 3: INJECTION GUARD MIDDLEWARE

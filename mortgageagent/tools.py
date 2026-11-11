@@ -11,19 +11,40 @@ Implements the 6 core tools defined in the Capstone Brief:
   6. escalate_case_to_underwriter: Escalation to human underwriting queue
 """
 
+import sys
 import time
 import uuid
+from pathlib import Path
 from typing import Dict, Any, List, Optional
 from langchain_core.tools import tool
-from mortgageagent.mock_data import (
-    SYNTHETIC_ACCOUNTS,
-    SYNTHETIC_DOCUMENTS,
-    SYNTHETIC_CRA_RECORDS,
-    MORTGAGE_POLICY,
-)
-from mortgageagent.mcp_gateway import gateway_instance
-from mortgageagent.database import store_application, append_audit_event
-from mortgageagent.middlewares import hitl_service
+
+_CURRENT_DIR = Path(__file__).resolve().parent
+_PROJECT_ROOT = _CURRENT_DIR.parent
+if str(_PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(_PROJECT_ROOT))
+if str(_CURRENT_DIR) not in sys.path:
+    sys.path.insert(0, str(_CURRENT_DIR))
+
+try:
+    from mortgageagent.mock_data import (
+        SYNTHETIC_ACCOUNTS,
+        SYNTHETIC_DOCUMENTS,
+        SYNTHETIC_CRA_RECORDS,
+        MORTGAGE_POLICY,
+    )
+    from mortgageagent.mcp_gateway import gateway_instance
+    from mortgageagent.database import store_application, append_audit_event
+    from mortgageagent.middlewares import hitl_service
+except ModuleNotFoundError:
+    from mock_data import (
+        SYNTHETIC_ACCOUNTS,
+        SYNTHETIC_DOCUMENTS,
+        SYNTHETIC_CRA_RECORDS,
+        MORTGAGE_POLICY,
+    )
+    from mcp_gateway import gateway_instance
+    from database import store_application, append_audit_event
+    from middlewares import hitl_service
 
 
 # ---------------------------------------------------------------------------

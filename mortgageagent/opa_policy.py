@@ -10,8 +10,21 @@ Rules:
   - The agent's prompt text or internal reasoning CANNOT alter or raise these limits.
 """
 
+import sys
+from pathlib import Path
 from typing import Dict, Any, Tuple
-from mortgageagent.mock_data import MORTGAGE_POLICY
+
+_CURRENT_DIR = Path(__file__).resolve().parent
+_PROJECT_ROOT = _CURRENT_DIR.parent
+if str(_PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(_PROJECT_ROOT))
+if str(_CURRENT_DIR) not in sys.path:
+    sys.path.insert(0, str(_CURRENT_DIR))
+
+try:
+    from mortgageagent.mock_data import MORTGAGE_POLICY
+except ModuleNotFoundError:
+    from mock_data import MORTGAGE_POLICY
 
 
 class PolicyDecision:

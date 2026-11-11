@@ -8,6 +8,16 @@ import datetime
 import json
 import os
 import sys
+from pathlib import Path
+
+# Ensure project root (parent directory of 'mortgageagent') and current directory are in sys.path
+_CURRENT_DIR = Path(__file__).resolve().parent
+_PROJECT_ROOT = _CURRENT_DIR.parent
+if str(_PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(_PROJECT_ROOT))
+if str(_CURRENT_DIR) not in sys.path:
+    sys.path.insert(0, str(_CURRENT_DIR))
+
 import streamlit as st
 
 # Configure page settings
@@ -79,25 +89,46 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-from mortgageagent.mock_data import (
-    SYNTHETIC_ACCOUNTS,
-    SYNTHETIC_DOCUMENTS,
-    SYNTHETIC_CRA_RECORDS,
-    MORTGAGE_POLICY,
-)
-from mortgageagent.agent_vulnerable import VulnerableKeystoneAgent
-from mortgageagent.agent_secured import SecuredKeystoneAgent
-from mortgageagent.database import (
-    get_db,
-    verify_audit_chain,
-    EXTERNAL_AUDIT_ANCHOR,
-)
-from mortgageagent.mcp_gateway import (
-    gateway_instance,
-    OFFICIAL_CRA_MANIFEST,
-    PINNED_CRA_MANIFEST_HASH,
-)
-from mortgageagent.middlewares import hitl_service
+try:
+    from mortgageagent.mock_data import (
+        SYNTHETIC_ACCOUNTS,
+        SYNTHETIC_DOCUMENTS,
+        SYNTHETIC_CRA_RECORDS,
+        MORTGAGE_POLICY,
+    )
+    from mortgageagent.agent_vulnerable import VulnerableKeystoneAgent
+    from mortgageagent.agent_secured import SecuredKeystoneAgent
+    from mortgageagent.database import (
+        get_db,
+        verify_audit_chain,
+        EXTERNAL_AUDIT_ANCHOR,
+    )
+    from mortgageagent.mcp_gateway import (
+        gateway_instance,
+        OFFICIAL_CRA_MANIFEST,
+        PINNED_CRA_MANIFEST_HASH,
+    )
+    from mortgageagent.middlewares import hitl_service
+except ModuleNotFoundError:
+    from mock_data import (
+        SYNTHETIC_ACCOUNTS,
+        SYNTHETIC_DOCUMENTS,
+        SYNTHETIC_CRA_RECORDS,
+        MORTGAGE_POLICY,
+    )
+    from agent_vulnerable import VulnerableKeystoneAgent
+    from agent_secured import SecuredKeystoneAgent
+    from database import (
+        get_db,
+        verify_audit_chain,
+        EXTERNAL_AUDIT_ANCHOR,
+    )
+    from mcp_gateway import (
+        gateway_instance,
+        OFFICIAL_CRA_MANIFEST,
+        PINNED_CRA_MANIFEST_HASH,
+    )
+    from middlewares import hitl_service
 
 
 # Persistent state initialization

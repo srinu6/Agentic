@@ -13,10 +13,23 @@ It enforces 5 core controls:
 
 import hashlib
 import json
+import sys
 import time
+from pathlib import Path
 from typing import Dict, Any, Tuple, Optional
 import jwt
-from mortgageagent.mock_data import SYNTHETIC_CRA_RECORDS
+
+_CURRENT_DIR = Path(__file__).resolve().parent
+_PROJECT_ROOT = _CURRENT_DIR.parent
+if str(_PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(_PROJECT_ROOT))
+if str(_CURRENT_DIR) not in sys.path:
+    sys.path.insert(0, str(_CURRENT_DIR))
+
+try:
+    from mortgageagent.mock_data import SYNTHETIC_CRA_RECORDS
+except ModuleNotFoundError:
+    from mock_data import SYNTHETIC_CRA_RECORDS
 
 GATEWAY_SECRET = "keystone-hsm-cra-gateway-secret-2026-uk-prod"
 

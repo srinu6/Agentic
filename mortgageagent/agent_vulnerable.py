@@ -16,11 +16,24 @@ this agent unconditionally issues the £2,000,000 Decision in Principle!
 
 import os
 import re
+import sys
+from pathlib import Path
 from typing import Dict, Any, List
 from dotenv import load_dotenv
 
+_CURRENT_DIR = Path(__file__).resolve().parent
+_PROJECT_ROOT = _CURRENT_DIR.parent
+if str(_PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(_PROJECT_ROOT))
+if str(_CURRENT_DIR) not in sys.path:
+    sys.path.insert(0, str(_CURRENT_DIR))
+
 from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
-from mortgageagent.mock_data import SYNTHETIC_ACCOUNTS, SYNTHETIC_CRA_RECORDS
+
+try:
+    from mortgageagent.mock_data import SYNTHETIC_ACCOUNTS, SYNTHETIC_CRA_RECORDS
+except ModuleNotFoundError:
+    from mock_data import SYNTHETIC_ACCOUNTS, SYNTHETIC_CRA_RECORDS
 
 load_dotenv()
 

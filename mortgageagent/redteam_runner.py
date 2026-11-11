@@ -17,16 +17,34 @@ Outputs a comprehensive Before/After comparison matrix and logs.
 import json
 import os
 import sys
+from pathlib import Path
 from typing import Dict, Any, List
 
-from mortgageagent.agent_vulnerable import VulnerableKeystoneAgent
-from mortgageagent.agent_secured import SecuredKeystoneAgent
-from mortgageagent.database import (
-    get_db,
-    verify_audit_chain,
-    EXTERNAL_AUDIT_ANCHOR,
-)
-from mortgageagent.mock_data import SYNTHETIC_DOCUMENTS
+_CURRENT_DIR = Path(__file__).resolve().parent
+_PROJECT_ROOT = _CURRENT_DIR.parent
+if str(_PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(_PROJECT_ROOT))
+if str(_CURRENT_DIR) not in sys.path:
+    sys.path.insert(0, str(_CURRENT_DIR))
+
+try:
+    from mortgageagent.agent_vulnerable import VulnerableKeystoneAgent
+    from mortgageagent.agent_secured import SecuredKeystoneAgent
+    from mortgageagent.database import (
+        get_db,
+        verify_audit_chain,
+        EXTERNAL_AUDIT_ANCHOR,
+    )
+    from mortgageagent.mock_data import SYNTHETIC_DOCUMENTS
+except ModuleNotFoundError:
+    from agent_vulnerable import VulnerableKeystoneAgent
+    from agent_secured import SecuredKeystoneAgent
+    from database import (
+        get_db,
+        verify_audit_chain,
+        EXTERNAL_AUDIT_ANCHOR,
+    )
+    from mock_data import SYNTHETIC_DOCUMENTS
 
 
 def run_all_scenarios() -> Dict[str, Any]:

@@ -14,37 +14,75 @@ Integrates all 8 defense-in-depth modules:
 
 import os
 import re
+import sys
 import time
+from pathlib import Path
 from typing import Dict, Any, List, Optional, Tuple
 from dotenv import load_dotenv
 
-from mortgageagent.mock_data import (
-    SYNTHETIC_ACCOUNTS,
-    SYNTHETIC_DOCUMENTS,
-    SYNTHETIC_CRA_RECORDS,
-    MORTGAGE_POLICY,
-)
-from mortgageagent.mcp_gateway import gateway_instance
-from mortgageagent.database import (
-    store_application,
-    append_audit_event,
-    verify_audit_chain,
-)
-from mortgageagent.opa_policy import opa_engine
-from mortgageagent.middlewares import (
-    injection_guard,
-    pii_guard,
-    boundary_guard,
-    hitl_service,
-)
-from mortgageagent.tools import (
-    lookup_lloyds_account,
-    ingest_income_document,
-    query_credit_score_mcp,
-    compute_mortgage_affordability,
-    issue_decision_in_principle,
-    escalate_case_to_underwriter,
-)
+_CURRENT_DIR = Path(__file__).resolve().parent
+_PROJECT_ROOT = _CURRENT_DIR.parent
+if str(_PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(_PROJECT_ROOT))
+if str(_CURRENT_DIR) not in sys.path:
+    sys.path.insert(0, str(_CURRENT_DIR))
+
+try:
+    from mortgageagent.mock_data import (
+        SYNTHETIC_ACCOUNTS,
+        SYNTHETIC_DOCUMENTS,
+        SYNTHETIC_CRA_RECORDS,
+        MORTGAGE_POLICY,
+    )
+    from mortgageagent.mcp_gateway import gateway_instance
+    from mortgageagent.database import (
+        store_application,
+        append_audit_event,
+        verify_audit_chain,
+    )
+    from mortgageagent.opa_policy import opa_engine
+    from mortgageagent.middlewares import (
+        injection_guard,
+        pii_guard,
+        boundary_guard,
+        hitl_service,
+    )
+    from mortgageagent.tools import (
+        lookup_lloyds_account,
+        ingest_income_document,
+        query_credit_score_mcp,
+        compute_mortgage_affordability,
+        issue_decision_in_principle,
+        escalate_case_to_underwriter,
+    )
+except ModuleNotFoundError:
+    from mock_data import (
+        SYNTHETIC_ACCOUNTS,
+        SYNTHETIC_DOCUMENTS,
+        SYNTHETIC_CRA_RECORDS,
+        MORTGAGE_POLICY,
+    )
+    from mcp_gateway import gateway_instance
+    from database import (
+        store_application,
+        append_audit_event,
+        verify_audit_chain,
+    )
+    from opa_policy import opa_engine
+    from middlewares import (
+        injection_guard,
+        pii_guard,
+        boundary_guard,
+        hitl_service,
+    )
+    from tools import (
+        lookup_lloyds_account,
+        ingest_income_document,
+        query_credit_score_mcp,
+        compute_mortgage_affordability,
+        issue_decision_in_principle,
+        escalate_case_to_underwriter,
+    )
 
 load_dotenv()
 
