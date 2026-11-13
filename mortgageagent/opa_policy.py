@@ -67,8 +67,8 @@ class OPAPolicyEngine:
         property_value: float,
         gross_income: float,
         credit_score: int,
-        existing_debts_monthly: float,
-        fixed_outgoings_monthly: float,
+        existing_debts_monthly: float = 0.0,
+        fixed_outgoings_monthly: float = 0.0,
         flagged_risk: bool = False,
     ) -> PolicyDecision:
         """

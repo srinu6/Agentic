@@ -14,6 +14,7 @@ dependencies = [
     "langchain-openai>=1.6.7",
     "pyjwt>=2.15.1",
     "python-dotenv>=1.2.4",
+    "rebuff>=0.0.5",
     "streamlit>=1.67.0",
     "uvicorn>=0.54.0",
 ]
