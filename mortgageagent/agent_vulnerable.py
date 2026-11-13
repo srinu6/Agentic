@@ -56,6 +56,13 @@ class VulnerableKeystoneAgent:
         self.system_prompt = VULNERABLE_SYSTEM_PROMPT
         self.execution_logs: List[str] = []
         self.sent_decisions: List[Dict[str, Any]] = []
+        self._llm = None
+        if os.getenv("GROQ_API_KEY"):
+            try:
+                from langchain_groq import ChatGroq
+                self._llm = ChatGroq(model_name="openai/gpt-oss-120b", temperature=0.1)
+            except Exception:
+                self._llm = None
 
     def _log(self, text: str):
         print(text)

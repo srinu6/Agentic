@@ -276,11 +276,20 @@ def verify_audit_chain() -> Dict[str, Any]:
     return {
         "valid": len(errors) == 0,
         "total_events": len(rows),
+        "event_count": len(rows),
         "tip_hash": tip_hash,
         "external_anchor": EXTERNAL_AUDIT_ANCHOR,
         "anchor_intact": anchor_intact,
         "errors": errors,
     }
+
+
+def get_audit_events(limit: int = 50) -> List[Dict[str, Any]]:
+    """Retrieves recent audit ledger events."""
+    con = get_db()
+    cur = con.cursor()
+    rows = cur.execute("SELECT * FROM audit_ledger ORDER BY event_id DESC LIMIT ?", (limit,)).fetchall()
+    return [dict(r) for r in rows]
 
 
 # ---------------------------------------------------------------------------
