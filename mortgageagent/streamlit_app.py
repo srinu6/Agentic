@@ -518,9 +518,10 @@ with tabs[2]:
             import subprocess
             pf_env = os.environ.copy()
             pf_env["PROMPTFOO_PYTHON"] = sys.executable
+            pf_env["PYTHONIOENCODING"] = "utf-8"
             cfg = str(_PROJECT_ROOT / "mortgageagent" / "promptfooconfig.yaml" if (_PROJECT_ROOT / "mortgageagent").is_dir() else _CURRENT_DIR / "promptfooconfig.yaml")
             cmd = f'npx --yes promptfoo@latest eval -c "{cfg}" --no-cache -o "{results_file}"'
-            proc = subprocess.run(cmd, shell=True, env=pf_env, capture_output=True, text=True, cwd=str(_CURRENT_DIR))
+            proc = subprocess.run(cmd, shell=True, env=pf_env, capture_output=True, text=True, encoding="utf-8", errors="replace", cwd=str(_CURRENT_DIR))
             if proc.returncode in [0, 100]:
                 st.success("✓ Promptfoo Red-Team Run Completed!")
             else:

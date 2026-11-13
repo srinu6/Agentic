@@ -312,12 +312,17 @@ if res_legit.get('certificate'):
     nb["cells"].append(md("""## 10. Automated Red-Teaming with Promptfoo
 We use Promptfoo to systematically test both the Vulnerable Baseline Agent and the Fortified Keystone Agent across adversarial and policy breach vectors."""))
 
-    nb["cells"].append(code("""import subprocess
+    nb["cells"].append(code("""import os
+import sys
 import json
+import subprocess
+from pathlib import Path
 
 print("Executing Promptfoo Red-Team Evaluation...")
+_CWD = Path.cwd()
 env = os.environ.copy()
 env["PROMPTFOO_PYTHON"] = sys.executable
+env["PYTHONIOENCODING"] = "utf-8"
 
 config_file = str(_CWD / "mortgageagent" / "promptfooconfig.yaml" if (_CWD / "mortgageagent").is_dir() else "promptfooconfig.yaml")
 cmd = f'npx --yes promptfoo@latest eval -c "{config_file}" --no-cache -o promptfoo_results.json'
@@ -328,6 +333,8 @@ proc = subprocess.run(
     env=env,
     capture_output=True,
     text=True,
+    encoding="utf-8",
+    errors="replace",
     cwd=str(_CWD / "mortgageagent" if (_CWD / "mortgageagent").is_dir() else _CWD)
 )
 print(f"Promptfoo Evaluation completed (Exit Code: {proc.returncode})")
@@ -335,7 +342,7 @@ print(f"Promptfoo Evaluation completed (Exit Code: {proc.returncode})")
 # Parse and display the Promptfoo Results Matrix
 results_path = Path("mortgageagent/promptfoo_results.json") if Path("mortgageagent/promptfoo_results.json").exists() else Path("promptfoo_results.json")
 if results_path.exists():
-    with open(results_path) as f:
+    with open(results_path, "r", encoding="utf-8") as f:
         data = json.load(f)
     items = data.get("results", {}).get("results", [])
     by_test = {}
